@@ -10,6 +10,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/todos")
 public class TodoController {
+
+    private static final String TODO_NOT_FOUND = "Todo not found";
+
     // No persistent store layer
     // in-server memory, server wiped then data is lost
     private static List<Todo> todoList;
@@ -45,12 +48,13 @@ public class TodoController {
 
     // specifying url params
     @GetMapping("/{todoId}")
-    public ResponseEntity<Todo>getTodoById(@PathVariable Long todoId){
+    public ResponseEntity<?>getTodoById(@PathVariable Long todoId){
         for(Todo todo : todoList){
             if(todo.getId() == todoId){
                 return ResponseEntity.status(HttpStatus.OK).body(todo);
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(TODO_NOT_FOUND);
     }
 }
