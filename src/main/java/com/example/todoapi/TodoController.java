@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/todos")
 public class TodoController {
     // No persistent store layer
     // in-server memory, server wiped then data is lost
@@ -31,26 +32,25 @@ public class TodoController {
 //        return newTodo;
 //    }
 
-    @GetMapping("/todos")
+    @GetMapping
     public ResponseEntity<List<Todo>>getTodos(){
         return ResponseEntity.status(HttpStatus.OK).body(todoList);
     }
 
-    @PostMapping("/todos")
+    @PostMapping
     public ResponseEntity<Todo> createTodos(@RequestBody Todo newTodo){
         todoList.add(newTodo);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
     }
 
-    // specifying path params
-    @GetMapping("/todos/{todoId}")
+    // specifying url params
+    @GetMapping("/{todoId}")
     public ResponseEntity<Todo>getTodoById(@PathVariable Long todoId){
         for(Todo todo : todoList){
             if(todo.getId() == todoId){
                 return ResponseEntity.status(HttpStatus.OK).body(todo);
             }
         }
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
