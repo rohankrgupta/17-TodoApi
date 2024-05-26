@@ -10,30 +10,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/todos")
 public class TodoController {
-
     private static final String TODO_NOT_FOUND = "Todo not found";
+    private static List<Todo> todoList;
 
     // No persistent store layer
     // in-server memory, server wiped then data is lost
-    private static List<Todo> todoList;
-
     public TodoController() {
         todoList = new ArrayList<>();
         todoList.add(new Todo(1, false, "todo-1", 1));
         todoList.add(new Todo(2, true, "todo-2", 2));
     }
-//    Method 1 -> send responses explicitly without ResponseEntity class
-//    @GetMapping("/todos")
-//    public List<Todo>getTodos(){
-//        return todoList;
-//    }
-//
-//    @PostMapping("/todos")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Todo createTodo(@RequestBody Todo newTodo){
-//        todoList.add(newTodo);
-//        return newTodo;
-//    }
 
     private int fetchTodoIndex(Long todoId) {
         int index = -1;
@@ -102,4 +88,17 @@ public class TodoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(referredTodo);
     }
+
+//    Method 1 -> send responses explicitly without ResponseEntity class
+//    @GetMapping("/todos")
+//    public List<Todo>getTodos(){
+//        return todoList;
+//    }
+//
+//    @PostMapping("/todos")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Todo createTodo(@RequestBody Todo newTodo){
+//        todoList.add(newTodo);
+//        return newTodo;
+//    }
 }
