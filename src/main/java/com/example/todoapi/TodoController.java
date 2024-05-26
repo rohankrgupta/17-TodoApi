@@ -1,15 +1,20 @@
 package com.example.todoapi;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/todos")
 public class TodoController {
+    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
     private static final String TODO_NOT_FOUND = "Todo not found";
     private static List<Todo> todoList;
 
@@ -32,7 +37,8 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getTodos() {
+    public ResponseEntity<List<Todo>> getTodos(@RequestParam(required = false, defaultValue = "true") Boolean isCompleted) {
+        log.info("Request Params :: isCompleted : {}", isCompleted);
         return ResponseEntity.status(HttpStatus.OK).body(todoList);
     }
 
@@ -73,6 +79,8 @@ public class TodoController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer userId)
     {
+        logger.info("Request Params :: Id: {}, Completed: {}, Title: {}, UserId: {}", id, completed, title, userId);
+
         int index = fetchTodoIndex(todoId);
 
         if(index == -1){
@@ -88,7 +96,6 @@ public class TodoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(referredTodo);
     }
-
 //    Method 1 -> send responses explicitly without ResponseEntity class
 //    @GetMapping("/todos")
 //    public List<Todo>getTodos(){
