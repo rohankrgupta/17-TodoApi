@@ -41,4 +41,16 @@ public class TodoController {
         todoList.add(newTodo);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
     }
+
+    // specifying path params
+    @GetMapping("/todos/{todoId}")
+    public ResponseEntity<Todo>getTodoById(@PathVariable Long todoId){
+        for(Todo todo : todoList){
+            if(todo.getId() == todoId){
+                return ResponseEntity.status(HttpStatus.OK).body(todo);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
